@@ -12,7 +12,7 @@ int nota[2];
 float carnet, media;
 
 /*
-	Datos que se guardan hasta el final del programa
+Datos que se guardan hasta el final del programa
 */
 
 struct curso {
@@ -31,12 +31,11 @@ struct alumnoMenor {
 } alumMenor;
 
 /*
-	Validacion float con scanf
+Validacion float con scanf
 */
 
 bool validacionFloat(float *scan, bool *validacion) {
 	if (!scanf("%f", scan)) {
-		while (getchar() != '\n');
 		return *validacion = false;
 	}
 	else {
@@ -45,12 +44,11 @@ bool validacionFloat(float *scan, bool *validacion) {
 }
 
 /*
-	Validacion int con scanf
+Validacion int con scanf
 */
 
 bool validacionInt(int *scan, bool *validacion) {
 	if (!scanf("%i", scan)) {
-		while (getchar() != '\n');
 		return *validacion = false;
 	}
 	else {
@@ -59,7 +57,7 @@ bool validacionInt(int *scan, bool *validacion) {
 }
 
 /*
-	Validacion entre dos numeros enteros
+Validacion entre dos numeros enteros
 */
 
 bool validacionEntreNum(int num, int entre1, int entre2, bool *validacion) {
@@ -70,10 +68,6 @@ bool validacionEntreNum(int num, int entre1, int entre2, bool *validacion) {
 		return *validacion = false;
 	}
 }
-
-/*
-	Promedio de dos numeros enteros con resultado float
-*/
 
 float promedio(float num1, float num2) {
 	float promedio;
@@ -94,6 +88,7 @@ void pedirDatos() {
 		if (!validacionFloat(&carnet, &validado[0])) {
 			printf("- ERROR: Solo se permiten numeros\n \n");
 		}
+		fflush(stdin); // Limpiar buffer. Error si se inserta por EJ. (123ASD). Lo que en el buffer quedaria ASD y afectaria al siguiente scanf.
 	} while (!validado[0]);
 
 	for (int i = 0; i < 2; i++) {
@@ -107,6 +102,7 @@ void pedirDatos() {
 			else {
 				printf("- ERROR: Solo se permiten numeros.\n");
 			}
+			fflush(stdin);
 		} while (!validado[1] || !validado[2]);
 	}
 }
@@ -137,17 +133,19 @@ void procesarDatos() {
 }
 
 void mostrarDatos() {
-	printf("\nA  - REPORTE: por alumno\n");
+	printf("\n_________________________________________\n");
+	printf("          Reporte por alumno\n");
+	printf("_________________________________________\n \n");
 	printf("A1 - Carnet del estudiantes: %.0f\n", carnet);
 	printf("A2 - Notas del curso anterior: %i - %i\n", nota[0], nota[1]);
 	printf("A3 - Media de notas: %.2f\n", media);
 	printf("A4 - Curso: ");
 	printf(media >= 15 ? "A" : "B");
-	printf("\n");
+	printf("\n_________________________________________\n \n");
 }
 
 bool deseaContinuar() {
-	bool validado = true;
+	bool validado;
 	char resp;
 
 	do {
@@ -156,8 +154,13 @@ bool deseaContinuar() {
 		if (!(resp == 's' || resp == 'S' || resp == 'n' || resp == 'N')) {
 			validado = false;
 			printf("- ERROR: El valor insertado no esta permitido. Solo se permiten (S/N)");
+			resp = 's';
+		}
+		else {
+			validado = true;
 		}
 		printf("\n");
+		fflush(stdin);
 	} while (!validado);
 
 	if (resp == 'n' || resp == 'N') {
@@ -166,17 +169,14 @@ bool deseaContinuar() {
 	else {
 		return false;
 	}
-
-	system("cls");
 }
 
 void procesarReporte() {
 	curso[0].media = promedio(curso[0].media, (float)curso[0].alumnos);
-	curso[1].media = promedio(curso[1].media, (float)curso[0].alumnos);
+	curso[1].media = promedio(curso[1].media, (float)curso[1].alumnos);
 }
 
 void mostrarReporte() {
-	system("cls");
 	printf("_________________________________________\n");
 	printf("             REPORTE FINAL \n");
 	printf("_________________________________________\n \n");
@@ -195,7 +195,8 @@ void mostrarReporte() {
 
 	printf("B4 - Alumno con menor promedio: \n");
 	printf("B4 - Carnet: %.0f \n", alumMenor.carnet);
-	printf("B4 - Promedio: %.2f \n \n", alumMenor.media);
+	printf("B4 - Promedio: %.2f \n", alumMenor.media);
+	printf("_________________________________________\n \n");
 }
 
 void main() {
@@ -206,6 +207,7 @@ void main() {
 		mostrarDatos();
 	} while (!deseaContinuar());
 	procesarReporte();
+	bienvenida();
 	mostrarReporte();
 	system("pause");
 }
