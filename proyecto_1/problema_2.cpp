@@ -8,7 +8,7 @@ Visual C++: Para que deje complilar
 #include <stdio.h>
 #include <stdlib.h>
 
-float alm, costoP, costoF, ganancia, costoPNinos, gananciaDulces;
+float alm, costoP, ganancia, costoPNinos, gananciaDulces;
 char tipo;
 int rango, ninos, adultos, salados, dulces;
 
@@ -130,21 +130,19 @@ void procesarDatos() {
 	// Dulces
 	else {
 		dulces++;
-		if (tipo == 'a' || tipo == 'A') {
+		if (tipo == 'n' || tipo == 'N') {
 			costoP = 4 * alm;
-			ganancia = costoP*0.20;
-			adultos++;
+			ganancia = costoP*0.15;
+			ninos++;
+			costoPNinos += costoP;
 		}
 		else {
 			costoP = 6 * alm;
 			ganancia = costoP*0.25;
-			ninos++;
-			costoPNinos += costoP;
+			adultos++;
 		}
 		gananciaDulces += ganancia;
 	}
-
-	costoF = costoP + ganancia;
 
 	// Mayor producto con ganancia
 	if (prodMayorG.ganancia <= ganancia) {
@@ -164,7 +162,7 @@ void mostrarDatos() {
 	printf(rango >= 11 ? "dulce" : "salado");
 	printf("\nA3 - Costo de almacenamiento %.2f\n", alm);
 	printf("A4 - Valor de produccion: %.2f\n", costoP);
-	printf("A5 - Precio de venta al publico: %.2f\n", costoF);
+	printf("A5 - Precio de venta al publico: %.2f\n", costoP + ganancia);
 	printf("A6 - Ganacia de la empresa: %.2f\n", ganancia);
 	printf("\n_________________________________________\n \n");
 }

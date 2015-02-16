@@ -1,5 +1,5 @@
 /*
-	Hecho en Visual C++:
+Visual C++: Para que deje complilar
 */
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
@@ -10,10 +10,6 @@
 
 int nota[2];
 float carnet, media;
-
-/*
-Datos que se guardan hasta el final del programa
-*/
 
 struct curso {
 	int alumnos;
@@ -31,7 +27,7 @@ struct alumnoMenor {
 } alumMenor;
 
 /*
-Validacion float con scanf
+	Validacion float con scanf
 */
 
 bool validacionFloat(float *scan, bool *validacion) {
@@ -44,7 +40,7 @@ bool validacionFloat(float *scan, bool *validacion) {
 }
 
 /*
-Validacion int con scanf
+	Validacion int con scanf
 */
 
 bool validacionInt(int *scan, bool *validacion) {
@@ -57,7 +53,7 @@ bool validacionInt(int *scan, bool *validacion) {
 }
 
 /*
-Validacion entre dos numeros enteros
+	Validacion entre dos numeros enteros
 */
 
 bool validacionEntreNum(int num, int entre1, int entre2, bool *validacion) {
@@ -88,7 +84,7 @@ void pedirDatos() {
 		if (!validacionFloat(&carnet, &validado[0])) {
 			printf("- ERROR: Solo se permiten numeros\n \n");
 		}
-		fflush(stdin); // Limpiar buffer. Error si se inserta por EJ. (123ASD). Lo que en el buffer quedaria ASD y afectaria al siguiente scanf.
+		fflush(stdin);
 	} while (!validado[0]);
 
 	for (int i = 0; i < 2; i++) {
@@ -171,11 +167,6 @@ bool deseaContinuar() {
 	}
 }
 
-void procesarReporte() {
-	curso[0].media = promedio(curso[0].media, (float)curso[0].alumnos);
-	curso[1].media = promedio(curso[1].media, (float)curso[1].alumnos);
-}
-
 void mostrarReporte() {
 	printf("_________________________________________\n");
 	printf("             REPORTE FINAL \n");
@@ -185,9 +176,9 @@ void mostrarReporte() {
 	printf("B1 - Curso A: %i \n", curso[0].alumnos);
 	printf("B1 - Curso B: %i \n \n", curso[1].alumnos);
 
-	printf("B2 - Promedio de notas \n");
-	printf("B2 - Curso A: %.2f \n", curso[0].media);
-	printf("B2 - Curso B: %.2f \n \n", curso[1].media);
+	printf("B2 - Promedio de notas: \n");
+	printf("B2 - Curso A: %.2f \n", promedio(curso[0].media, (float)curso[0].alumnos));
+	printf("B2 - Curso B: %.2f \n \n", promedio(curso[1].media, (float)curso[1].alumnos));
 
 	printf("B3 - Alumno con mayor promedio: \n");
 	printf("B3 - Carnet: %.0f \n", alumMayor.carnet);
@@ -206,7 +197,6 @@ void main() {
 		procesarDatos();
 		mostrarDatos();
 	} while (!deseaContinuar());
-	procesarReporte();
 	bienvenida();
 	mostrarReporte();
 	system("pause");
