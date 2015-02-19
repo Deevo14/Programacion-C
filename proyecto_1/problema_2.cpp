@@ -9,7 +9,7 @@ Visual C++: Para que deje complilar
 #include <stdlib.h>
 
 float alm, costoP, ganancia, costoPNinos, gananciaDulces;
-char tipo;
+char tipo, resp;
 int rango, ninos, adultos, salados, dulces;
 
 struct productoMayorTipo {
@@ -22,32 +22,6 @@ struct productoMayorGanancia {
 	float ganancia;
 	char tipo;
 } prodMayorG;
-
-/*
- *	Validacion float con scanf
- */
-
-bool validacionFloat(float *scan, bool *validacion) {
-	if (!scanf("%f", scan)) {
-		return *validacion = false;
-	}
-	else {
-		return *validacion = true;
-	}
-}
-
-/*
- *	Validacion int con scanf
- */
-
-bool validacionInt(int *scan, bool *validacion) {
-	if (!scanf("%i", scan)) {
-		return *validacion = false;
-	}
-	else {
-		return *validacion = true;
-	}
-}
 
 /*
  *	Validacion entre dos numeros enteros
@@ -78,8 +52,12 @@ void pedirDatos() {
 
 	do {
 		printf("- Insertar el costo de almacenamiento del producto: ");
-		if (!validacionFloat(&alm, &validado[0])) {
+		if (!scanf("%f", &alm)) {
+			validado[0] = false;
 			printf("- ERROR: Solo se permiten numeros reales\n \n");
+		}
+		else {
+			validado[0] = true;
 		}
 		fflush(stdin);
 	} while (!validado[0]);
@@ -99,12 +77,14 @@ void pedirDatos() {
 
 	do {
 		printf("\n- Insertar el rango del producto (1-20): ");
-		if (validacionInt(&rango, &validado[2])) {
+		if (scanf("%i", &rango)) {
+			validado[2] = true;
 			if (!validacionEntreNum(rango, 1, 20, &validado[3])) {
 				printf("- ERROR: Solo numeros entre 1-20.\n");
 			}
 		}
 		else {
+			validado[2] = false;
 			printf("- ERROR: Solo se permiten numeros.\n");
 		}
 		fflush(stdin);
@@ -167,12 +147,11 @@ void mostrarDatos() {
 	printf("\n_________________________________________\n \n");
 }
 
-bool deseaContinuar() {
+void deseaContinuar() {
 	bool validado;
-	char resp;
 
 	do {
-		printf("\n- Desea agregar otro producto? (S)i - (N)o: ");
+		printf("\n- Desea agregar a otro alumno. (S)i - (N)o: ");
 		scanf(" %c", &resp);
 		if (!(resp == 's' || resp == 'S' || resp == 'n' || resp == 'N')) {
 			validado = false;
@@ -185,13 +164,6 @@ bool deseaContinuar() {
 		printf("\n");
 		fflush(stdin);
 	} while (!validado);
-
-	if (resp == 'n' || resp == 'N') {
-		return true;
-	}
-	else {
-		return false;
-	}
 }
 
 void procesarReporte() {
@@ -235,7 +207,8 @@ void main() {
 		pedirDatos();
 		procesarDatos();
 		mostrarDatos();
-	} while (!deseaContinuar());
+		deseaContinuar();
+	} while (resp == 's' || resp == 'S');
 	procesarReporte();
 	bienvenida();
 	mostrarReporte();

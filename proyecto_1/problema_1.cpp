@@ -8,8 +8,8 @@ Visual C++: Para que deje complilar
 #include <stdio.h>
 #include <stdlib.h>
 
-int nota[2];
-float carnet, media;
+float carnet, media, nota[2];
+char resp;
 
 struct curso {
 	int alumnos;
@@ -27,36 +27,10 @@ struct alumnoMenor {
 } alumMenor;
 
 /*
-	Validacion float con scanf
-*/
-
-bool validacionFloat(float *scan, bool *validacion) {
-	if (!scanf("%f", scan)) {
-		return *validacion = false;
-	}
-	else {
-		return *validacion = true;
-	}
-}
-
-/*
-	Validacion int con scanf
-*/
-
-bool validacionInt(int *scan, bool *validacion) {
-	if (!scanf("%i", scan)) {
-		return *validacion = false;
-	}
-	else {
-		return *validacion = true;
-	}
-}
-
-/*
 	Validacion entre dos numeros enteros
 */
 
-bool validacionEntreNum(int num, int entre1, int entre2, bool *validacion) {
+bool validacionEntreNum(float num, float entre1, float entre2, bool *validacion) {
 	if (num >= entre1 && num <= entre2) {
 		return *validacion = true;
 	}
@@ -66,9 +40,7 @@ bool validacionEntreNum(int num, int entre1, int entre2, bool *validacion) {
 }
 
 float promedio(float num1, float num2) {
-	float promedio;
-	num2 == 0 ? promedio = 0 : promedio = num1 / num2;
-	return promedio;
+	return num2 == 0 ? 0 : num1 / num2;
 }
 
 void bienvenida() {
@@ -81,8 +53,12 @@ void pedirDatos() {
 
 	do {
 		printf("- Insertar la cedula del estudiante: ");
-		if (!validacionFloat(&carnet, &validado[0])) {
+		if (!scanf("%f", &carnet)) {
 			printf("- ERROR: Solo se permiten numeros\n \n");
+			validado[0] = false;
+		} 
+		else {
+			validado[0] = true;
 		}
 		fflush(stdin);
 	} while (!validado[0]);
@@ -90,12 +66,14 @@ void pedirDatos() {
 	for (int i = 0; i < 2; i++) {
 		do {
 			printf("\n- Insertar la nota (%i): ", i);
-			if (validacionInt(&nota[i], &validado[1])) {
+			if (scanf("%f", &nota[i])) {
+				validado[1] = true;
 				if (!validacionEntreNum(nota[i], 0, 20, &validado[2])) {
 					printf("- ERROR: Solo numeros entre 0-20.\n");
 				}
 			}
 			else {
+				validado[1] = false;
 				printf("- ERROR: Solo se permiten numeros.\n");
 			}
 			fflush(stdin);
@@ -104,7 +82,7 @@ void pedirDatos() {
 }
 
 void procesarDatos() {
-	media = promedio((float)(nota[0] + nota[1]), 2);
+	media = promedio(nota[0] + nota[1], 2);
 
 	if (media >= 15) { // Curso A
 		curso[0].alumnos++;
@@ -129,20 +107,19 @@ void procesarDatos() {
 }
 
 void mostrarDatos() {
-	printf("\n_________________________________________\n");
-	printf("          Reporte por alumno\n");
-	printf("_________________________________________\n \n");
+	printf("\n___________________________________________________________\n");
+	printf("                  Reporte por alumno\n");
+	printf("___________________________________________________________\n \n");
 	printf("A1 - Carnet del estudiantes: %.0f\n", carnet);
-	printf("A2 - Notas del curso anterior: %i - %i\n", nota[0], nota[1]);
+	printf("A2 - Notas del curso anterior: %.2f - %.2f\n", nota[0], nota[1]);
 	printf("A3 - Media de notas: %.2f\n", media);
 	printf("A4 - Curso: ");
 	printf(media >= 15 ? "A" : "B");
-	printf("\n_________________________________________\n \n");
+	printf("\n___________________________________________________________\n \n");
 }
 
-bool deseaContinuar() {
+void deseaContinuar() {
 	bool validado;
-	char resp;
 
 	do {
 		printf("\n- Desea agregar a otro alumno. (S)i - (N)o: ");
@@ -158,13 +135,6 @@ bool deseaContinuar() {
 		printf("\n");
 		fflush(stdin);
 	} while (!validado);
-
-	if (resp == 'n' || resp == 'N') {
-		return true;
-	}
-	else {
-		return false;
-	}
 }
 
 void mostrarReporte() {
@@ -196,7 +166,8 @@ void main() {
 		pedirDatos();
 		procesarDatos();
 		mostrarDatos();
-	} while (!deseaContinuar());
+		deseaContinuar();
+	} while (resp == 's' || resp == 'S');
 	bienvenida();
 	mostrarReporte();
 	system("pause");

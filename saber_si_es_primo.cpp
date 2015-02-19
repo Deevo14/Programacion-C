@@ -70,7 +70,7 @@ void pedirDatos() {
 
 void mostrarDatos() {
 	time_t start_t, end_t;
-
+	
 	time(&start_t);
 	if (es_primo(num)) {
 		printf("- El numero %i es primo\n", num);
@@ -79,7 +79,7 @@ void mostrarDatos() {
 		printf("- El numero %i no es primo\n", num);
 	}
 	time(&end_t);
-	printf("\nEl programa ha tardado: %lf segundos.\n", end_t - start_t);
+	printf("\nEl programa ha tardado: %lf segundos.\n", difftime(end_t, start_t));
 }
 
 bool deseaContinuar() {
