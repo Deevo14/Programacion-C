@@ -12,16 +12,18 @@ float alm, costoP, ganancia, costoPNinos, gananciaDulces;
 char tipo, resp;
 int rango, ninos, adultos, salados, dulces;
 
-struct productoMayorTipo {
+// Datos del tipo (A - N) que tiene mas cantidad
+struct tipoMayorCantidad {
 	int cantidad;
 	char tipo;
-} prodMayorT;
+} tipoMayor;
 
+// Datos del producto de mayor ganacia
 struct productoMayorGanancia {
 	int rango;
 	float ganancia;
 	char tipo;
-} prodMayorG;
+} gananciaMayor;
 
 /*
  *	Validacion entre dos numeros enteros
@@ -36,10 +38,12 @@ bool validacionEntreNum(int num, int entre1, int entre2, bool *validacion) {
 	}
 }
 
+/*
+ *   Funcion promedio con validacion de divison entre 0
+ */
+
 float promedio(float num1, float num2) {
-	float promedio;
-	num2 == 0 ? promedio = 0 : promedio = num1 / num2;
-	return promedio;
+	return num2 == 0 ? 0 : num1 / num2;
 }
 
 void bienvenida() {
@@ -50,6 +54,7 @@ void bienvenida() {
 void pedirDatos() {
 	bool validado[4];
 
+	// Primer scanf: Almacenamiento
 	do {
 		printf("- Insertar el costo de almacenamiento del producto: ");
 		if (!scanf("%f", &alm)) {
@@ -62,6 +67,7 @@ void pedirDatos() {
 		fflush(stdin);
 	} while (!validado[0]);
 
+	// Segundo scanf: tipo de producto
 	do {
 		printf("\n- Insertar el tipo de producto: (N)inos - (A)dultos: ");
 		scanf("%c", &tipo);
@@ -75,6 +81,7 @@ void pedirDatos() {
 		fflush(stdin);
 	} while (!validado[1]);
 
+	// Tercer scanf: Rango
 	do {
 		printf("\n- Insertar el rango del producto (1-20): ");
 		if (scanf("%i", &rango)) {
@@ -124,11 +131,11 @@ void procesarDatos() {
 		gananciaDulces += ganancia;
 	}
 
-	// Mayor producto con ganancia
-	if (prodMayorG.ganancia <= ganancia) {
-		prodMayorG.ganancia = ganancia;
-		prodMayorG.tipo = tipo;
-		prodMayorG.rango = rango;
+	// Ganacia mayor
+	if (gananciaMayor.ganancia <= ganancia) {
+		gananciaMayor.ganancia = ganancia;
+		gananciaMayor.tipo = tipo;
+		gananciaMayor.rango = rango;
 	}
 }
 
@@ -166,16 +173,19 @@ void deseaContinuar() {
 	} while (!validado);
 }
 
-void procesarReporte() {
-	// Para saber cual es el tipo con mayor cantidad
+void tipoMayorCantidad(int ninos, int adultos, char *tipo, int *cantidad) {
 	if (ninos >= adultos) {
-		prodMayorT.tipo = 'n';
-		prodMayorT.cantidad = ninos;
+		*tipo = 'n';
+		*cantidad = ninos;
 	}
 	else {
-		prodMayorT.tipo = 'a';
-		prodMayorT.cantidad = adultos;
+		*tipo = 'a';
+		*cantidad = adultos;
 	}
+}
+
+void procesarReporte() {
+	tipoMayorCantidad(ninos, adultos, &tipoMayor.tipo, &tipoMayor.cantidad);
 }
 
 void mostrarReporte() {
@@ -184,8 +194,8 @@ void mostrarReporte() {
 	printf("______________________________________________________________\n \n");
 	printf("B1 - Producto que se fabrico en mayor cantidad: \n");
 	printf("B1 - Tipo: ");
-	printf(prodMayorT.tipo == 'a' || prodMayorT.tipo == 'A' ? "(A)dulto" : "(N)inos");
-	printf("\nB1 - Cantidad: %i \n \n", prodMayorT.cantidad);
+	printf(tipoMayor.tipo == 'a' || tipoMayor.tipo == 'A' ? "(A)dulto" : "(N)inos");
+	printf("\nB1 - Cantidad: %i \n \n", tipoMayor.cantidad);
 	printf("B2 - Cantidad de variedades \n");
 	printf("B2 - Salado: %i \n", salados);
 	printf("B2 - Dulce: %i \n \n", dulces);
@@ -195,9 +205,9 @@ void mostrarReporte() {
 	printf("B6 - Promedio de ganancias por dulces: %.2f \n\n", promedio(gananciaDulces, (float)dulces));
 	printf("B7 - Producto que genero la maxima ganancia: \n");
 	printf("B7 - Tipo: ");
-	printf(prodMayorG.tipo == 'a' || prodMayorG.tipo == 'A' ? "(A)dulto" : "(N)inos");
-	printf("\nB7 - Codigo: %i \n", prodMayorG.rango);
-	printf("B7 - Ganancia: %.2f \n \n", prodMayorG.ganancia);
+	printf(gananciaMayor.tipo == 'a' || gananciaMayor.tipo == 'A' ? "(A)dulto" : "(N)inos");
+	printf("\nB7 - Codigo: %i \n", gananciaMayor.rango);
+	printf("B7 - Ganancia: %.2f \n \n", gananciaMayor.ganancia);
 	printf("______________________________________________________________\n \n");
 }
 

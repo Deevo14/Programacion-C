@@ -11,24 +11,27 @@ Visual C++: Para que deje complilar
 float carnet, media, nota[2];
 char resp;
 
+// Datos de cada curso
 struct curso {
 	int alumnos;
 	float media;
 } curso[2];
 
+// Datos del alumno con mayor promedio
 struct alumnoMayor {
 	float carnet;
 	float media;
 } alumMayor;
 
+// Datos del alumno con menor promedio
 struct alumnoMenor {
 	float carnet;
 	float media = 20;
 } alumMenor;
 
 /*
-	Validacion entre dos numeros enteros
-*/
+ *   Validacion entre dos numeros enteros
+ */
 
 bool validacionEntreNum(float num, float entre1, float entre2, bool *validacion) {
 	if (num >= entre1 && num <= entre2) {
@@ -39,30 +42,37 @@ bool validacionEntreNum(float num, float entre1, float entre2, bool *validacion)
 	}
 }
 
+/*
+ *   Funcion promedio con validacion de divison entre 0
+ */
+
 float promedio(float num1, float num2) {
 	return num2 == 0 ? 0 : num1 / num2;
 }
 
 void bienvenida() {
 	system("cls");
-	printf("Programa del departamento de programacion: Distribucion de alumnos por curso. \n %i alumno(s) agregado(s). \n \n", curso[0].alumnos + curso[1].alumnos);
+	printf("Programa del departamento de programacion: Distribucion de alumnos por curso. \n");
+	printf("%i alumno(s) agregado(s). \n \n", curso[0].alumnos + curso[1].alumnos);
 }
 
 void pedirDatos() {
 	bool validado[3];
 
+	// Primer Scanf: pedir cedula
 	do {
 		printf("- Insertar la cedula del estudiante: ");
 		if (!scanf("%f", &carnet)) {
 			printf("- ERROR: Solo se permiten numeros\n \n");
 			validado[0] = false;
-		} 
+		}
 		else {
 			validado[0] = true;
 		}
 		fflush(stdin);
 	} while (!validado[0]);
 
+	// Segundo y tercer scanf: pedir notas
 	for (int i = 0; i < 2; i++) {
 		do {
 			printf("\n- Insertar la nota (%i): ", i);
@@ -81,6 +91,26 @@ void pedirDatos() {
 	}
 }
 
+/*
+ *	 Funcion para saber cual alumno tiene mayor 
+ *   y menor promedio de notas
+ */
+
+void rankingMedia(char tipo[], float media, float carnet, float *mediaX, float *carnetX){
+	if (tipo == "Mayor") {
+		if (*mediaX <= media) {
+			*mediaX = media;
+			*carnetX = carnet;
+		}
+	}
+	else {
+		if (*mediaX >= media) { // alum_menor = 20
+			*mediaX = media;
+			*carnetX = carnet;
+		}
+	}
+}
+
 void procesarDatos() {
 	media = promedio(nota[0] + nota[1], 2);
 
@@ -93,17 +123,8 @@ void procesarDatos() {
 		curso[1].media += media;
 	}
 
-	// Hallar al alumno con mayor promedio
-	if (alumMayor.media <= media) {
-		alumMayor.media = media;
-		alumMayor.carnet = carnet;
-	}
-
-	// Hallar al alumno con menor promedio
-	if (alumMenor.media >= media) { // alum_menor = 20
-		alumMenor.media = media;
-		alumMenor.carnet = carnet;
-	}
+	rankingMedia("Mayor", media, carnet, &alumMayor.media, &alumMayor.carnet);
+	rankingMedia("Menor", media, carnet, &alumMenor.media, &alumMenor.carnet);
 }
 
 void mostrarDatos() {
