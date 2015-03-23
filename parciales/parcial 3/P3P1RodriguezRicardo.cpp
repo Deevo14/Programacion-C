@@ -35,10 +35,10 @@ bool es_par(int num) {
 bool es_primo(int num, int count = 3) {
     if(num == 3 || num == 2) {
         return true;
+    } else if(count == sqrt(num)) {
+        return true;
     } else if(num%count == 0) {
         return false;
-    } else if(count != sqrt(num)) {
-        return true;
     } else {
         es_primo(num, count+1);
     }
